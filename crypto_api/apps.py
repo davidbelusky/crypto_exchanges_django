@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class FirstapiConfig(AppConfig):
-    name = 'firstapi'
+    name = 'crypto_api'

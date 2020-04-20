@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('firstapi', '0001_initial'),
+        ('crypto_api', '0001_initial'),
     ]
 
     operations = [
