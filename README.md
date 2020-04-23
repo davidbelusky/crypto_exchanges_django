@@ -10,10 +10,10 @@
 
 ## Info:
 **Crypto currencies trading** :
-- Create exchange. Fields: id, name, currency (fiat), amount
-- Deposit amount to exchange_id. Fields: id, exchange_id (foreign_key), currency, amount
-- Crypto currencie for exchange_id. Fields: id, exchange_id (foreign_key), crypto_currency, crypto_name, amount, favourite (boolean)
-- Trades for exchange_id. Fields: id, exchange_id (foreign_key), created_date ,currency_in ,currency_out, amount
+- Create exchange: [id, name, currency (fiat), amount]
+- Deposit amount to exchange_id: [id, exchange_id (foreign_key), currency, amount]
+- Crypto currencie for exchange_id: [id, exchange_id (foreign_key), crypto_currency, crypto_name, amount, favourite (boolean]
+- Trades for exchange_id: [id, exchange_id (foreign_key), created_date ,currency_in ,currency_out, amount]
 
 
 ### Sources:
@@ -27,6 +27,27 @@
 **_name_** - Name must be unique. Name is automatically capitalize 'david' > 'David'
 
 **_currency_** - Currency in which total amount for exchange will be displayed. Must be 3 letter shortcut of fiat currency ex. 'USD'. Input is automatically converted to uppercase 'usd' > 'USD'
+
+**GET** `/exchanges`
+
+Show all exchanges
+
+```json 
+[
+    {
+        "id": 1,
+        "name": "David",
+        "currency": "EUR",
+        "amount": 4498.0
+    },
+    {
+        "id": 2,
+        "name": "Palo",
+        "currency": "CZK",
+        "amount": 0.0
+    }
+]
+```
 
 **POST** `/exchanges`
 ```json 
@@ -58,6 +79,26 @@ Show specific exchange_id
   "amount":0
 }
 ```
+
+### Edit specific exchange ID
+**PUT** `/exchanges/{int:exchange_id}/`
+
+Allowed fields for editing:
+
+**_name_** - Name can be changed same rules as during POST new exchange
+
+**_currency_** - Currency can be changed. If currency is changed amount automatically convert to new currency for exchange
+
+```json
+{
+  "name": "Patrik",
+  "currency":"USD",
+}
+```
+
+### Response:
+
+'Success' or error message. 
 
 ## Deposit exchange
 ### Request:
