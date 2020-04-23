@@ -257,7 +257,7 @@ class TradesAllView(APIView):
                 try:
                     crypto_currencie = CryptoCurrencies.objects.get(exchange_id=pk,crypto_currency=data['currency_out'])
                 except CryptoCurrencies.DoesNotExist:
-                    return Response({'Wrong input currency_out':'crypto currencie {} doesnt exist'.format(str(data['currency_out']))},status=status.HTTP_404_NOT_FOUND)
+                    return Response({'Wrong input currency_out':'crypto currencie {} doesnt exist'.format(str(data['currency_out']))},status=status.HTTP_400_BAD_REQUEST)
                 #Convert inputted fiat currency in amount to currency out crypto amount
                 converted_crypto_amount = Convert_currency.convert(data['currency_in'],data['currency_out'],data['amount'])
                 crypto_currencie.amount = crypto_currencie.amount + converted_crypto_amount
