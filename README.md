@@ -40,19 +40,19 @@
 New created object or error message. 
 ```json 
 {
-  "id":1
+  "id":1,
   "name": "David",
   "currency":"EUR",
   "amount":0
 }
 ```
-## Get specific exchange by ID
+### Get specific exchange by ID
 **GET** `/exchanges/{int:exchange_id}/`
 Show specific exchange_id 
 
 ```json
 {
-  "id":1
+  "id":1,
   "name": "David",
   "currency":"EUR",
   "amount":0
@@ -81,34 +81,20 @@ Show specific exchange_id
 ## Update cryptocurrencies within exchange
 ### Request:
 
-**_name_** - Crypto name ex. 'Bitcoin', mandatory if **currency** is not inserted.
-
-**_currency_** - Crypto currency 3 letter shortcut ex. 'BTC', mandatory if **name** is not inserted.
+**_crypto_currency_** - Crypto currency 3 letter shortcut ex. 'BTC'
 
 **_favourite_** - Boolean True/False. Default = False
 
-**PUT** `/exchanges/{int:exchange_id}/currencie`
+**POST** `/exchanges/{int:exchange_id}/currencie`
  ```json
 {
-  "name": "Bitcoin",
-  "Favourite": true
+  "crypto_currency": "BTC",
+  "favourite":true
 } 
 ```
 
-**Inputted name/currency or both of them:** 
-
-- **CREATE** If name/currency doesnt exist for exchange_id then create this crypto currency
-
-- **DELETE** If name/currency exist for exchange_id then delete this crypto currency
-
-**Inputted name/currency or both of them and favourite:**
-
-- **CREATE** If name/currency doesnt exist for exchange_id then create it with custom favourite.
-
-- **UPDATE** If name/currency exist for exchange_id then update favourite parameter in DB
-
 ### Response:
-All crypto currencies for specific exchange_id or error message.
+Show all crypto currencies for specific exchange_id or error message
 
 ```json 
 [
@@ -131,6 +117,28 @@ All crypto currencies for specific exchange_id or error message.
 ]
 ```
 
+
+**PUT** `/exchanges/{int:exchange_id}/currencie/{int:currency_id}`
+
+Only field 'favourite' can be changed (true/false)
+
+ ```json
+{
+  "crypto_currency": "BTC",
+  "favourite": false
+} 
+```
+
+### Response:
+
+Show updated crypto currencie
+
+**DELETE** `/exchanges/{int:exchange_id}/currencie/{int:currency_id}`
+
+### Response:
+
+HTTP 204 No content
+
 ## Create trade
 ### Request:
 
@@ -140,81 +148,108 @@ All crypto currencies for specific exchange_id or error message.
 
 **_currency_out_** - 3 letter shortcut fiat/crypto currency 
 
-**POST** /exchanges/{int:exchange_id}/trades
+### Info:
+- Cannot convert from fiat to fiat or crypto to crypto. Only fiat to crypto or crypto to fiat is allowed
+- Check if trade amount <= exchange amount
+- Convert trade fiat currency amount to exchange fiat currency amount
+- Add/Substract from crypto and exchange based on operation
+- Trades cannot be deleted or edited
+
+**GET** `/exchanges/{int:exchange_id}/trades` 
+
+Show all trades for specific exchange_id
+
+```json 
+[
+    {
+        "id": 1,
+        "exchange_id": 1,
+        "created_date": "2020-04-20T11:12:54.862624Z",
+        "currency_in": "EUR",
+        "currency_out": "BTC",
+        "amount": 5000.0
+    },
+    {
+        "id": 2,
+        "exchange_id": 1,
+        "created_date": "2020-04-23T06:53:52.308722Z",
+        "currency_in": "BTC",
+        "currency_out": "USD",
+        "amount": 1.0
+    }
+]
+```
+
+**POST**  `/exchanges/{int:exchange_id}/trades` 
 ```json 
 {
-	"currency_in": "usd",
-	"currency_out": "btc",
-	"amount":5000
+	"currency_in": "eur",
+	"currency_out": "eth",
+	"amount": 1
 }
 ```
 
-### Info:
-- Cannot convert from fiat to fiat or crypto to crypto. Only fiat to crypto or crypto to fiat is allowed
-- Check if trade amount <= balance amount
-- Convert trade fiat to exchange fiat currency
-- Add/Substract from crypto and exchange based on operation
-
 ### Response:
-traded amount, actual exchange currency amount,exchange currency or error message
 
 ```json 
 {
-    "actual_amount": 0.9818410621979138,
-    "currency": "BTC",
-    "exchanged_amount": 0.491053058849187
+    "id": 1,
+    "exchange_id": 1,
+    "created_date": "2020-04-23T06:53:52.308722Z",
+    "currency_in": "EUR",
+    "currency_out": "ETH",
+    "amount": 1.0
 }
 ```
 
 ## History of trades
 ### Request:
-**_offset_** - start from
 
-**_limit_** - max to show
+**_exchange_id_** - unique ID of exchange
 
-**_exchange_id_** - unique index
+**_exchange_name_** - name of exchange (not case-sensitive)
 
-**_search_** - searching contain text in trade table and column 'name'. ex. ('Bitcoin','B','coin')
+**_currency_in_** - currency_in trade (not case-sensitive)
+
+**_currency_out_** - currency_out trade (not case-sensitive)
+
+**_created_date_** - specific created datetime
 
 **_date_from_** - trade_date >= date_from
 
 **_date_to_**  - trade_date <= date_to
 
-**GET** `/history?offset={offset}&limit={limit}&exchange_id={exchange_id}&search={search}&date_from={date_from}&date_to={date_to}`
+**GET** `/trade_history/`
 
-ex. ```URL http://127.0.0.1:5000/exchanges/history?exchange_id=1&limit=5&offset=2&search=Bi&date_from=5.11.2019&date_to=15.2.2020```
+ex. ```URL http://127.0.0.1:8000/trade_history/?exchange_id__id=1&exchange_id__name__iexact=David&currency_in__iexact=EUR&currency_out__iexact=BTC&created_date=2020-04-20T11%3A12%3A54.862624Z&created_date__lte=&created_date__gte=```
 
 ### Response:
-list of json records with applied parameters filter
+Filtered data
 
 ```json  
-[
-  {
-    "amount": 5000.0,
-    "curr_in": "USD",
-    "curr_out": "BTC",
-    "exchange_id": 81,
-    "id": 26,
-    "name": "Bitcoin",
-    "trade_date": "Thu, 13 Feb 2020 18:42:09 GMT"
-  },
-  {
-    "amount": 5.0,
-    "curr_in": "USD",
-    "curr_out": "BTC",
-    "exchange_id": 81,
-    "id": 27,
-    "name": "Bitcoin",
-    "trade_date": "Thu, 13 Feb 2020 18:42:21 GMT"
-  },
-  {
-    "amount": 1.0,
-    "curr_in": "USD",
-    "curr_out": "BTC",
-    "exchange_id": 81,
-    "id": 28,
-    "name": "Bitcoin",
-    "trade_date": "Thu, 13 Feb 2020 18:42:28 GMT"
-  }
-]
+
+{
+    "count": 2,
+    "next": null,
+    "previous": null,
+    "results": [
+        {
+            "id": 1,
+            "exchange_id": 1,
+            "created_date": "2020-04-20T11:12:54.862624Z",
+            "currency_in": "EUR",
+            "currency_out": "BTC",
+            "amount": 5000.0
+        },
+        {
+            "id": 2,
+            "exchange_id": 1,
+            "created_date": "2020-04-23T06:53:52.308722Z",
+            "currency_in": "EUR",
+            "currency_out": "ETH",
+            "amount": 1.0
+        }
+    ]
+}
+
 ```
