@@ -9,13 +9,17 @@
 5. To run tests use: `py manage.py test`
 
 ## Info:
-**Crypto currencies trading** - 
-- Create exchange. Fields: id, name, currency (fiat),amount
+**Crypto currencies trading** :
+- Create exchange. Fields: id, name, currency (fiat), amount
 - Deposit amount to exchange_id. Fields: id, exchange_id (foreign_key), currency, amount
 - Crypto currencie for exchange_id. Fields: id, exchange_id (foreign_key), crypto_currency, crypto_name, amount, favourite (boolean)
 - Trades for exchange_id. Fields: id, exchange_id (foreign_key), created_date ,currency_in ,currency_out, amount
 
-**Exchange rates** - In model.py are two options default is from json static data 'currency_data.txt'. There is also commented option where is data set to get from online API with actual rates
+
+### Sources:
+**Exchange rates** - Getting from online API
+
+**Currencie list** - In model.py are two options default is from json static data 'currency_data.txt'. There is also commented option where data getting from online API with actual rates
 
 ## Create exchange
 ### Request:
@@ -27,7 +31,7 @@
 **POST** `/exchanges`
 ```json 
 {
-  "name": "first_exchange",
+  "name": "david",
   "currency":"eur" 
 }
 ```
@@ -37,7 +41,19 @@ New created object or error message.
 ```json 
 {
   "id":1
-  "name": "First_exchange",
+  "name": "David",
+  "currency":"EUR",
+  "amount":0
+}
+```
+## Get specific exchange by ID
+**GET** `/exchanges/{int:exchange_id}/`
+Show specific exchange_id 
+
+```json
+{
+  "id":1
+  "name": "David",
   "currency":"EUR",
   "amount":0
 }
@@ -48,7 +64,7 @@ New created object or error message.
 
 **_amount_** - Float number
 
-**_currency_** - 3 letter shortcut of fiat currency. If deposit currency != exchange_id currency convert deposit currency to exchange currency and insert to exchange. ex. 'EUR'     
+**_currency_** - 3 letter shortcut of fiat currency. If 'deposit' currency not equal to 'exchange_id' currency then convert deposit currency to exchange currency and insert converted amount to exchange.   
 
 **POST** `/exchanges/{int:exchange_id}/`
 ```json
