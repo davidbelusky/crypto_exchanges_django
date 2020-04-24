@@ -57,7 +57,7 @@ Show all exchanges
 }
 ```
 
-### Response:
+#### Response:
 New created object or error message. 
 ```json 
 {
@@ -96,7 +96,7 @@ Allowed fields for editing:
 }
 ```
 
-### Response:
+#### Response:
 
 'Success' or error message. 
 
@@ -115,7 +115,7 @@ Allowed fields for editing:
 } 
 ```
 
-### Response:
+#### Response:
 'Success' or error message
 
 
@@ -134,7 +134,7 @@ Allowed fields for editing:
 } 
 ```
 
-### Response:
+#### Response:
 Show all crypto currencies for specific exchange_id or error message
 
 ```json 
@@ -176,7 +176,7 @@ Show updated crypto currencie
 
 **DELETE** `/exchanges/{int:exchange_id}/currencie/{int:currency_id}`
 
-### Response:
+#### Response:
 
 HTTP 204 No content
 
@@ -230,7 +230,7 @@ Show all trades for specific exchange_id
 }
 ```
 
-### Response:
+#### Response:
 
 ```json 
 {
@@ -264,7 +264,7 @@ Show all trades for specific exchange_id
 
 ex. ```URL http://127.0.0.1:8000/trade_history/?exchange_id__id=1&exchange_id__name__iexact=David&currency_in__iexact=EUR&currency_out__iexact=BTC&created_date=2020-04-20T11%3A12%3A54.862624Z&created_date__lte=&created_date__gte=```
 
-### Response:
+#### Response:
 Filtered data
 
 ```json  
