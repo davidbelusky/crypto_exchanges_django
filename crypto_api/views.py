@@ -38,9 +38,10 @@ class ExchangeOneView(APIView):
         Required fields:
         -'currency' ex.(USD,eur)
         -'amount' float ex.(10.5, 12)
-        After POST deposit this amount convert to exchange currency and add this amount to specific exchange_id. And save deposit to deposit table.
+        Convert deposit amount to exchange currency and add this amount to specific exchange_id. And save deposit to deposits table.
 
-    PUT: Only "name" and "currency" can be changed for specific exchange_id
+    PUT: Only "name" and "currency" can be changed for specific exchange_id.
+    If currency was changed then automatically convert amount to a new currency
     DELETE: Delete specific exchange_id
 
     """
