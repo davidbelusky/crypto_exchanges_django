@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    container_name: cryptoexchange
+    volumes:
+      - .:/app
+
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  db:
+    image: postgres
+    container_name: "mycontainer"
+    ports:
+      - "5432"
+    environment:
+      - POSTGRES_DB=django
+      - POSTGRES_USER=david
+      - POSTGRES_PASSWORD=dav
+
+#https://medium.com/analytics-vidhya/getting-started-with-postgresql-using-docker-compose-34d6b808c47c
