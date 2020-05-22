@@ -21,6 +21,38 @@
 
 **Currencie list** - In model.py are two options default is from json static data 'currency_data.txt'. There is also commented option where data getting from online API with actual rates
 
+
+
+## Docker setup:
+
+1. Edit django project setting mysite/settings.py 
+
+   ```python
+   DATABASES = {
+       'default': {
+           'ENGINE': 'django.db.backends.postgresql',
+           'NAME': 'django',
+           'USER': 'david',
+           'PASSWORD': 'dav',
+           'HOST': 'db',
+           'PORT': 5432,
+       }
+   }
+   ```
+
+2. Build docker image.
+   In django project folder input into terminal
+
+   ```pse
+   docker-compose build
+   ```
+
+3. Run docker image
+
+   ```pseudocode
+   docker-compose up
+   ```
+
 ## Create exchange
 ### Request:
 
@@ -132,7 +164,7 @@ Allowed fields for editing:
   "crypto_currency": "BTC",
   "favourite":true
 } 
-```
+ ```
 
 #### Response:
 Show all crypto currencies for specific exchange_id or error message
@@ -168,7 +200,7 @@ Only field 'favourite' can be changed (true/false)
   "crypto_currency": "BTC",
   "favourite": false
 } 
-```
+ ```
 
 ### Response:
 
